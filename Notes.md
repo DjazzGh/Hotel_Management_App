@@ -1,6 +1,6 @@
 TO DO LIST:
 -Dans la classe administrateur:
-Finir 3 méthodes (Traiter demande, Ajouter chambre, Supprimer chambre)
+Finir 3 méthodes (Traiter demande, Ajouter chambre, Supprimer chambre) done
 
 -Dans la classe Client:
 Finir 3 méthodes (ModifierDateReservation, ModifierchambreReservation,AnnulerReservation)
