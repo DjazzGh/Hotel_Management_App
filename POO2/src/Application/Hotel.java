@@ -3,8 +3,8 @@ import java.util.*;
 
 
 public class Hotel {
-	HashMap<Integer,Reservation> h =new HashMap<>();
-	ArrayList<Chambre> h2 =new ArrayList<>();
+	static HashMap<Integer,Reservation> h =new HashMap<>();
+	static ArrayList<Chambre> h2 =new ArrayList<>();
 	public static void main(String [] args) {
 		
 		//Afficher les hashmaps
