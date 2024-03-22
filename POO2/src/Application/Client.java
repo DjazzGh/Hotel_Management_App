@@ -5,16 +5,22 @@ public class Client extends Utilisateur {
 	String Nom;
 	String Prenom;
 	String Email;
-	int NumeroTelephone;
+	String NumeroTelephone;
 	Date datenaissance;
+	static int D=0;//pour le numero sequentiel de ID
 	
-	public Client(String Nom,String Prenom,String Email,int NumeroTelephone,Date datenaissance ){
-		//this.ID=genererID();
+	public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Date datenaissance,int ID )throws Numerotelephone//exception {
 		this.Nom=Nom;
 		this.Prenom=Prenom;
 		this.Email=Email;
+		if( NumeroTelephone.lenght()!= 10 || !NumeroTelephone.startsWith("0") )//si la taille de la chaine est 10 et commence par 0
+		{
+			throw new  Numerotelephone;
+		}
 		this.NumeroTelephone=NumeroTelephone;
 		this.datenaissance=datenaissance;
+                this.ID=D;
+                D++;
 	}
 	
 	public String DemandeReservation(int ID,Date debut, Date fin,Chambre ch) {
