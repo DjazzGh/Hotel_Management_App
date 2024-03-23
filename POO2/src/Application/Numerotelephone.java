@@ -1,6 +1,7 @@
+package Application;
 public  class Numerotelephone extends Exception {
   private String msg="le numero de telephone est invalide !! ";
-  pubic String getmsg()
+  public String getmsg()
     {
     return msg;}
   
