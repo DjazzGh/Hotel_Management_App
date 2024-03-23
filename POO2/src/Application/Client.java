@@ -9,13 +9,13 @@ public class Client extends Utilisateur {
 	Date datenaissance;
 	static int D=0;//pour le numero sequentiel de ID
 	
-	public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Date datenaissance,int ID )throws Numerotelephone//exception {
+	public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Date datenaissance,int ID )throws Numerotelephone {
 		this.Nom=Nom;
 		this.Prenom=Prenom;
 		this.Email=Email;
-		if( NumeroTelephone.lenght()!= 10 || !NumeroTelephone.startsWith("0") )//si la taille de la chaine est 10 et commence par 0
+		if( NumeroTelephone.length()!= 10 || !NumeroTelephone.startsWith("0") )//si la taille de la chaine est 10 et commence par 0
 		{
-			throw new  Numerotelephone;
+			throw new  Numerotelephone();
 		}
 		this.NumeroTelephone=NumeroTelephone;
 		this.datenaissance=datenaissance;
