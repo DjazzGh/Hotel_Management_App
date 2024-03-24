@@ -9,4 +9,10 @@ public class Reservation {
 		this.fin=fin;
 		this.c=c;
 	}
+	public Chambre getchambre() {
+		return this.c;
+	}
+	public int getId() {
+		return this.ID;
+	}
 }
