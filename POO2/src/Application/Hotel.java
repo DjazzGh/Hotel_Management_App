@@ -3,21 +3,35 @@ import java.util.*;
 
 
 public class Hotel {
-	static HashMap<Integer,Reservation> h =new HashMap<>();
-	static ArrayList<Chambre> h2 =new ArrayList<>();
+static HashMap<Integer,List<Reservation>> listClientsReservations =new HashMap<>();
+static ArrayList<Chambre> listChambres =new ArrayList<>();
+static ArrayList <Client> listClients = new ArrayList<>();
 	public static void main(String [] args) {
+
+System.out.println("Affichage de la hashmap de la liste des reservations de chaque client :");		
+		for (Map.Entry<Integer, List<Reservation>> entry : listClientsReservations.entrySet()) {
+		    int clientId = entry.getKey();
+		    List<Reservation> reservations = entry.getValue();
+
+		    // Print client ID and reservations:
+		    System.out.println("Client ID: " + clientId);
+		    for (Reservation reservation : reservations) {
+		        System.out.println("  Reservation: " + reservation);
+		    }
+		}
 		
-		//Afficher les hashmaps
-		System.out.println(" les reservations:");
-	for (Map.Entry<Integer, Reservation> entry : h.entrySet()) {
-	    Integer key = entry.getKey();
-	    Reservation reservation = entry.getValue();
-	    System.out.println("Key: " + key + ", Reservation: " + reservation);
+System.out.println("Affichage de la liste des chambres :");
+for (Chambre chambre : listChambres) {
+	  System.out.println(chambre); 
 	}
-	System.out.println("\n les chambres:");
-	for (Chambre chambre : h2) {
-	    System.out.println(chambre);
+
+System.out.println("Affichage de la liste des clients :");
+for (Client client : listClients) {
+	  System.out.println(client); 
 	}
+
+
+		
 	}
 	
 
