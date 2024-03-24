@@ -30,4 +30,11 @@ public static boolean avant(Date date1,Date date2) {
 	if(a<b) return true;
 	else return false;
 }
+	public static boolean isBlank(Date date) {
+	if(DatetoInt(date)==0) {
+		return true;
+	}
+	return false;
+}
+
 }
