@@ -6,6 +6,7 @@ public class Hotel {
 static HashMap<Integer,List<Reservation>> listClientsReservations =new HashMap<>();
 static ArrayList<Chambre> listChambres =new ArrayList<>();
 static ArrayList <Client> listClients = new ArrayList<>();
+	static final int =2024;
 	public static void main(String [] args) {
 
 System.out.println("Affichage de la hashmap de la liste des reservations de chaque client :");		
