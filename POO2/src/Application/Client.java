@@ -13,18 +13,22 @@ public class Client extends Utilisateur {
 	Date datenaissance;
 	static int D=1;//pour le numero sequentiel de ID
 	
-	public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Date datenaissance,int ID )throws Numerotelephone {
+	public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Date datenaissance,int ID )throws Numerotelephone ,ageverification{
 		this.Nom=Nom;
 		this.Prenom=Prenom;
 		this.Email=Email;
+		 this.ID=D;
+                D++;
 		if( NumeroTelephone.length()!= 10 || !NumeroTelephone.startsWith("0") )//si la taille de la chaine est 10 et commence par 0
 		{
 			throw new  Numerotelephone();
 		}
 		this.NumeroTelephone=NumeroTelephone;
+		if (datenaissance.année-Hotel.annee !=18)
+			{
+			throw new ageverification;}
 		this.datenaissance=datenaissance;
-                this.ID=D;
-                D++;
+                
 	}
 		public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Date datenaissance,String username,String password){
 		this.Nom=Nom;
