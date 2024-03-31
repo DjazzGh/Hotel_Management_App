@@ -225,10 +225,89 @@ frame.setIconImage(image.getImage());
                 //JOptionPane.showMessageDialog(null,"Erreur dans la saisie","Authentification",JOptionPane.WARNING_MESSAGE);}
                 
                 SubscribeButton.addActionListener(new ActionListener() {
+			  JTextField nomField, prenomField, telephoneField, EmailField ,adresseField, dateField, utilisateurField, motDePasseField; 
                 	public void actionPerformed(ActionEvent e) {
                 		//Exemple de JOptionPane
-                		//JOptionPane.showMessageDialog(null,"Vous n'avez pas encore de réservation","New Client",JOptionPane.INFORMATION_MESSAGE);
-                	}
+                		
+			//JOptionPane.showMessageDialog(null,"Vous n'avez pas encore de réservation","New Client",JOptionPane.INFORMATION_MESSAGE);
+                	
+			JFrame inscriptionFrame = new JFrame("Inscription");
+                    inscriptionFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                      inscriptionFrame.setSize(400, 300);
+
+                       JPanel panel = new JPanel();
+                		   panel.setLayout(new GridLayout(9, 2));
+
+                       panel.add(new JLabel("Nom :"));
+                        nomField = new JTextField();
+                        panel.add(nomField);
+
+                        panel.add(new JLabel("Prénom :"));
+                        prenomField = new JTextField();
+                        panel.add(prenomField);
+
+                        panel.add(new JLabel("Numéro de téléphone :"));
+                        telephoneField = new JTextField();
+                        panel.add(telephoneField);
+
+                        panel.add(new JLabel("l'email :"));
+                        EmailField = new JTextField();
+                        panel.add(EmailField);
+                        
+                        panel.add(new JLabel("Adresse :"));
+                        adresseField = new JTextField();
+                        panel.add(adresseField);
+
+                        panel.add(new JLabel("Date de naissance :"));
+                        dateField = new JTextField();
+                        panel.add(dateField);
+
+                        panel.add(new JLabel("Nom utilisateur :"));
+                        utilisateurField = new JTextField();
+                        panel.add(utilisateurField);
+
+                        panel.add(new JLabel("Mot de passe :"));
+                        motDePasseField = new JTextField();
+                        panel.add(motDePasseField);
+
+                       JButton confirmerButton = new JButton("Confirmer");
+                        confirmerButton.addActionListener(new ActionListener() {
+                        	
+                    
+                        	
+                            public void actionPerformed(ActionEvent e) {
+                            	
+                                String nom = nomField.getText();
+                                String prenom = prenomField.getText();
+                                String telephone = telephoneField.getText();
+                                String  Email = EmailField.getText();
+                                //String adresse = adresseField.getText();
+                                String dateNaissance = dateField.getText();
+                                String utilisateur = utilisateurField.getText();
+                                String motDePasse = motDePasseField.getText();
+                               if( Utilisateur.SubscriptionCheck(nom,prenom,Email,telephone, dateNaissance,utilisateur, motDePasse )==false) {
+                            	   JOptionPane.showMessageDialog(null," ","New Client",JOptionPane.INFORMATION_MESSAGE);
+                               }
+                               else {
+                            	   
+                               }
+                               
+                                inscriptionFrame.dispose(); // Fermer la fenêtre d'inscription après confirmation
+                            }
+                        });
+                        panel.add(confirmerButton);
+
+                        inscriptionFrame.add(panel);
+                        inscriptionFrame.setVisible(true);
+                    }
+                  });
+
+                loginFrame.setVisible(true);
+            }
+        });
+
+			
+			}
                 });
 		    // le bouton continuer
               ValidateButton.addActionListener(new ActionListener() {
