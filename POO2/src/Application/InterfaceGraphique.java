@@ -312,7 +312,7 @@ frame.setIconImage(image.getImage());
 		    // le bouton continuer
               ValidateButton.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent e) {
-            	if(Authentification(String NomUtilisateur,String MotdePasse)==false){
+            	if(Utilisateur.Authentification(String NomUtilisateur,String MotdePasse)==false){
             	       JOptionPane.showMessageDialog(null,"Erreur dans la saisie","Authentification",JOptionPane.WARNING_MESSAGE);}
             	else {
             		Jframe vframe= new Jframe();
