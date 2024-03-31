@@ -230,7 +230,40 @@ frame.setIconImage(image.getImage());
                 		//JOptionPane.showMessageDialog(null,"Vous n'avez pas encore de réservation","New Client",JOptionPane.INFORMATION_MESSAGE);
                 	}
                 });
-             
+		    // le bouton continuer
+              ValidateButton.addActionListener(new ActionListener() {
+            	public void actionPerformed(ActionEvent e) {
+            	if(Authentification(String NomUtilisateur,String MotdePasse)==false){
+            	       JOptionPane.showMessageDialog(null,"Erreur dans la saisie","Authentification",JOptionPane.WARNING_MESSAGE);}
+            	else {
+            		Jframe vframe= new Jframe();
+            		vframe.setSize(400, 300);
+                    vframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    vframe.setResizable(false);
+
+                    // Création du panneau
+                    JPanel vpanel = new JPanel(new GridLayout(3, 1, 5, 5));
+
+                    // Boutons
+                    consulterButton = new JButton("Consulter mes réservations");
+                   
+                    nouvelleReservationButton = new JButton("Faire une nouvelle réservation");
+                   
+                    modifierReservationButton = new JButton("Modifier mes réservations");
+                   
+
+                    // Ajout des boutons au panneau
+                    vpanel.add(consulterButton);
+                    vpanel.add(nouvelleReservationButton);
+                    vpanel.add(modifierReservationButton);
+
+                    vframe.add(vpanel);
+
+                    vframe.setVisible(true);
+                }
+            	}
+            });
+            
                 contentPane.add(labeltop);
                 contentPane2.add(username);
                 contentPane2.add(usernameField);
@@ -239,7 +272,7 @@ frame.setIconImage(image.getImage());
                 contentPane.add(ValidateButton);
                 contentPane.add(labelbottom);
                 contentPane.add(SubscribeButton);
-                
+        
                 rentFrame.setVisible(true);
             }
         });
