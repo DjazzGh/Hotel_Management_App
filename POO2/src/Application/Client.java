@@ -104,4 +104,7 @@ List<Reservation> reservations = Hotel.listClientsReservations.get(ID); // Get t
 		return sc.next();
 		
 	}
+	public String toString() {
+	return ID+" "+Nom+" "+Prenom+" "+Email+" "+NumeroTelephone+" "+datenaissance+" "+NomUtilisateur+" "+motdepasse;
+}
 }
