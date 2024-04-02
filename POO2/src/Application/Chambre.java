@@ -24,4 +24,13 @@ double prix;
 	  public double getprix() {
 	  return this.prix;
   }
+		  public void setTypeChambre(Type t) {
+		  this.typechambre=t;
+	  }
+	  public void setDisponibilité(boolean b) {
+		  this.disponibilité=b;
+	  }
+	  public void setPrix(double p) {
+		  this.prix=p;
+	  }
 }
