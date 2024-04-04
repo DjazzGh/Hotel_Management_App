@@ -5,7 +5,7 @@ public class Administrateur extends Utilisateur {
 	public static boolean TraiterDemande(Demande d) {
 	    int id = d.getIDclient();
 	    Chambre c1 = d.getchambredemandé();
-	    if (c1.getdisponibiltéchambre() == false) {
+	    if (c1.getdisponibiltéchambre() == true) {
 	        Reservation r = new Reservation(d.getdatedebut(), d.getdatefin(), c1, id);
 	        List<Reservation> reservations = Hotel.listClientsReservations.get(id);
 	        if (reservations == null) {
