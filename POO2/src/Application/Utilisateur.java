@@ -1,5 +1,6 @@
 package Application;
 import Application.Date;
+import java.io.IOException;
 public abstract class Utilisateur {
  String NomUtilisateur;
  String motdepasse;
@@ -51,18 +52,21 @@ public abstract class Utilisateur {
    return false;
   }
   Client cl = new Client(Nom,Prenom,Email,NumeroTelephone,datenaissance,username,password);
-  Hotel.listClients.add(cl);
+  Fichier.addToFile("Clients", cl.toString());
   return true;
  }
 
  public static boolean AuthentificationClient(String username, String password) {
-  for (Client client : Hotel.listClients) {
-	  String nomutilisateur=client.getUsername();
-	  String motdepasse=client.getPassword();
-   if (nomutilisateur.equals(username) && motdepasse.equals(password)) {
-    return true;
-   }
-  }
-  return false;
+	 try { 
+		 int a=Fichier.findLineNumberWithWord("Clients",username);
+		 int b=Fichier.findLineNumberWithWord("Clients",password);
+		 if(a==b) {
+			 return true;
+		 }else { return false;}
+		 }
+			catch(IOException e) {
+				return false;
+				
+			}
  }
 }
