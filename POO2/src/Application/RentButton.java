@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.FileNotFoundException;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -136,12 +136,13 @@ public class RentButton extends JButton {
                                    }
                                    else {
 
-                                	   System.out.println("Affichage de la liste des clients :");
-                                	   for (Client client : Hotel.listClients) {
-                                	   	  System.out.println(client.toString()); 
-                                	   	}
-
+                                	 try {
+                                	   Fichier.AfficherContenuFichier("Clients");}
+                                	   catch(FileNotFoundException exe) {
+                                		   System.out.println("ce fichier n'existe pas");
+                                	   }
                                 	   inscriptionFrame.dispose(); // Fermer la fenêtre d'inscription après confirmation
+                                   }
                                    }
                                    
                                 }
@@ -162,7 +163,7 @@ public class RentButton extends JButton {
                     char [] clientpassword = passwordField.getPassword();
                     String passwordclient = new String(clientpassword).trim();
                 	if(Utilisateur.AuthentificationClient(Utilisateurname,passwordclient)==false) {
-            			System.out.println("OOPs");
+            			
             			 JOptionPane.showMessageDialog(null, "Une erreur est survenue.", "Erreur", JOptionPane.ERROR_MESSAGE);
             		}
             		else {
