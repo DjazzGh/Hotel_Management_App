@@ -21,9 +21,29 @@ public class Administrateur extends Utilisateur {
 
 	public void AjouterChambre(int numero,Type t,boolean disponibilité,double prix) {
 		Chambre c = new Chambre(numero, t ,disponibilité,prix);
-		Hotel.listChambres.add(c);
+		//Hotel.listChambres.add(c);
+		 try {Fichier.AddLineInFile("Chambres.txt",1,c.toString());}
+		 catch (IOException e) {
+			 System.out.println(e.getMessage());
+		 }
+	}
 	}
 	public void SupprimerChambre(Chambre c) {
-		Hotel.listChambres.remove(c);
+		//Hotel.listChambres.remove(c);
+		int a;
+		try { a = Fichier.findLineNumberWithWord("Chambres.txt", c.toString());
+		if(a!=-1)
+		{
+			try {
+			Fichier.deleteLineContainingWord("Chambres.txt",c.toString());}
+			 catch (IOException e) {
+				 System.out.println(e.getMessage());
+			 }
+		}}
+		 catch (IOException e) {
+			 System.out.println(e.getMessage());
+		 }
+		
+	}
 	}
 }
