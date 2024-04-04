@@ -33,13 +33,17 @@ public class Administrateur extends Utilisateur {
 		int a;
 		try { a = Fichier.findLineNumberWithWord("Chambres.txt", c.toString());
 		if(a!=-1)
-		{
+		
+	{
 			try {
 			Fichier.deleteLineContainingWord("Chambres.txt",c.toString());}
 			 catch (IOException e) {
 				 System.out.println(e.getMessage());
 			 }
-		}}
+		}else {
+			System.out.print("la chambre est deja supprimer");
+		}
+		}
 		 catch (IOException e) {
 			 System.out.println(e.getMessage());
 		 }
