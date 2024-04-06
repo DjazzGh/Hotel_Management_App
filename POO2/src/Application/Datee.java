@@ -36,5 +36,8 @@ public static boolean avant(Date date1,Date date2) {
 	}
 	return false;
 }
+		public String toString() {
+			return jour+"/"+mois+"/"+année;
+		}
 
 }
