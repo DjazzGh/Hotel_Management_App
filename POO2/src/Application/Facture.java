@@ -1,28 +1,44 @@
 package Application;
-import java.util.HashMap;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 public class Facture {
- 	static HashMap<Integer,Double> hprix=new HashMap<>();
-	public static void main(String [] args) {
 	
-	for (Map.Entry<Integer, List<Reservation>> entry : Hotel.listClientsReservations.entrySet()) {
-	    // Récupérer l'ID du client
-	    int idClient = entry.getKey();
+    public static void main(String[] args) throws FileNotFoundException {
+    	
 
-	    // Initialiser le prix total pour le client
-	    double prixTotal = 0.0;
-
-	    // Récupérer la liste des réservations du client
-	    List<Reservation> reservations = entry.getValue();
-
-	    // Parcourir la liste des réservations et ajouter le prix de chaque chambre au prix total
-	    for (Reservation reservation : reservations) {
-	        prixTotal += reservation.getchambre().getprix();
-	    }
-
-	    // Ajouter l'ID du client et le prix total au HashMap des prix
-	    hprix.put(idClient, prixTotal);
-	    
-	}}
-}
+    	try {
+    	boolean finish=false;
+    	int Id=1;
+    	while(finish==false) {
+    	String ID=String.valueOf(Id);
+    	
+    	List<String> lines=Fichier.findLinesWithPrefix("Reservations_Clients",ID);
+    	if (lines.isEmpty()) {
+    		  finish=true;} 
+    	else {
+    		  
+    	double facture=0;
+    	for (String line : lines) {
+    		// Découper la ligne en mots
+            String[] mots = line.split(" ");
+            String prix=mots[mots.length - 1];
+            facture += Double.parseDouble(prix);
+    		}
+    	Fichier.addToFile("Factures_Clients",ID+" "+String.valueOf(facture));  	
+    	Id++;
+    	}}}catch(IOException e) {
+    		System.out.println("Erreur");
+    	}
+    	try {
+    		Fichier.AfficherContenuFichier("Factures_Clients");}
+    		catch(FileNotFoundException exep) {
+    			System.out.println("fichier n'existe pas");
+    		}
+    
+    
+    
+    
+    
+    
+    }}
