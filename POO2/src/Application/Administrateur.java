@@ -1,53 +1,36 @@
 package Application;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class Administrateur extends Utilisateur {
 	public static boolean TraiterDemande(Demande d) {
 	    int id = d.getIDclient();
+	    Datee debut = d.getdatedebut();
+    	Datee fin = d.getdatefin();
 	    Chambre c1 = d.getchambredemandé();
-	    if (c1.getdisponibiltéchambre() == true) {
-	        Reservation r = new Reservation(d.getdatedebut(), d.getdatefin(), c1, id);
-	        List<Reservation> reservations = Hotel.listClientsReservations.get(id);
-	        if (reservations == null) {
-	            reservations = new ArrayList<>();
-	            Hotel.listClientsReservations.put(id, reservations);  
-	        }
-	        reservations.add(r);
+	    if (c1.getdisponibiltéchambre(debut,fin) == true) {  
+	    	c1.setDisponibilitéfalse(debut,fin);
+	    	Reservation r= new Reservation(id,debut,fin,c1);			
+			Fichier.addToFile("Reservations_Clients", r.toString());
 	        return true;
 	    } else {
 	        return false;
 	    }
 	}
 
-	public void AjouterChambre(int numero,Type t,boolean disponibilité,double prix) {
-		Chambre c = new Chambre(numero, t ,disponibilité,prix);
-		//Hotel.listChambres.add(c);
-		 try {Fichier.AddLineInFile("Chambres.txt",1,c.toString());}
-		 catch (IOException e) {
-			 System.out.println(e.getMessage());
-		 }
+	public static void AjouterChambre(Type t,double prix) {
+		Chambre c = new Chambre(t ,prix);
+		 Fichier.addToFile("Chambres",c.toString());
 	}
 	}
-	public void SupprimerChambre(Chambre c) {
-		//Hotel.listChambres.remove(c);
-		int a;
-		try { a = Fichier.findLineNumberWithWord("Chambres.txt", c.toString());
-		if(a!=-1)
-		
-	{
-			try {
-			Fichier.deleteLineContainingWord("Chambres.txt",c.toString());}
-			 catch (IOException e) {
-				 System.out.println(e.getMessage());
-			 }
-		}else {
-			System.out.print("la chambre est deja supprimer");
-		}
-		}
-		 catch (IOException e) {
-			 System.out.println(e.getMessage());
-		 }
+	public static void SupprimerChambre(int numero) {
+		try {
+			Fichier.deleteLineContainingWord("Chambres", String.valueOf(numero));
+		}catch(IOException exe) {
+			System.out.println("Erreur");
+		}	
 		
 	}
-	}
+	
 }
