@@ -131,7 +131,7 @@ public class RentButton extends JButton {
                                     String utilisateur = utilisateurField.getText();
                                     String motDePasse = motDePasseField.getText();
                                    
-                                   if( Utilisateur.SubscriptionCheck(nom,prenom,Email,telephone, dateNaissance,utilisateur, motDePasse)==false) {
+                                   if( Utilisateur.SubscriptionCheck(nom,prenom,Email,telephone, Datee.toDate(dateNaissance),utilisateur, motDePasse)==false) {
                                 	   JOptionPane.showMessageDialog(null, "Erreur dans la saisie", "Erreur", JOptionPane.ERROR_MESSAGE);
                                    }
                                    else {
