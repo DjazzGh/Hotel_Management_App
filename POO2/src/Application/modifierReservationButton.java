@@ -46,10 +46,6 @@ JFrame nframe = new JFrame("Liste des réservations");
                                                 Datee debut =  Datee.toDatee(debutText);
 	                                         Datee fin = Datee.toDatee(finText);
 	                              
-	                              
-	                                     Date debutDate = sdf.parse(debutText);
-	                                     Date finDate = sdf.parse(finText);
-                                            // je dois mettre la chambre id or something from the reservation
 	                                     if ( reservation.c.getdisponibiltéchambre(debut,fin)) {
 	                                         JOptionPane.showMessageDialog(frame, "Réservation enregistrée !");
 	                                     } else {
