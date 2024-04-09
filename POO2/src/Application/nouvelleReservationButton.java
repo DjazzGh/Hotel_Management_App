@@ -33,15 +33,19 @@ public nouvelleReservationButton() {
 			        startDateField = new JTextField();
 			        panel.add(startDateLabel);
 			        panel.add(startDateField);
-
+                               String textFieldstart = startDateField.getText();
+			        Datee StartDateField= Datee.toDatee(textFieldstart);
 			        // Étiquette et champ de saisie pour la date de fin
 			        JLabel endDateLabel = new JLabel("Date de fin:");
 			        endDateField = new JTextField();
-			        panel.add(endDateLabel);
+	                       panel.add(endDateLabel);
 			        panel.add(endDateField);
+		                
 			        mframe.add(panel);
+		                  String textFieldend = endDateField.getText();
+			        Datee EndDateField = Datee.toDatee(textFieldend); 
                     
-                    if ( Date.avant(startDateField,endDateField)== false)
+                    if ( Date.avant(StartDateField,EndDateField)== false)
                     {
                     	JOptionPane.showMessageDialog(null, "Format de date invalide", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
