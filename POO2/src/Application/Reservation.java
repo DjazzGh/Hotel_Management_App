@@ -17,4 +17,7 @@ public class Reservation {
 	public int getId() {
 		return this.ID;
 	}
+	public String toString ()  {
+		return  debut + " "+fin+" "+c+" "+ID+" ";
+	}
 }
