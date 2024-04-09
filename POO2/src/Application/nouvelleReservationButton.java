@@ -30,14 +30,14 @@ public nouvelleReservationButton() {
 
 			        // Étiquette et champ de saisie pour la date de début
 			        JLabel startDateLabel = new JLabel("Date de début:");
-			        startDateField = new JTextField();
+			       JTextField  startDateField = new JTextField();
 			        panel.add(startDateLabel);
 			        panel.add(startDateField);
                                String textFieldstart = startDateField.getText();
 			        Datee StartDateField= Datee.toDatee(textFieldstart);
 			        // Étiquette et champ de saisie pour la date de fin
 			        JLabel endDateLabel = new JLabel("Date de fin:");
-			        endDateField = new JTextField();
+			       JTextField  endDateField = new JTextField();
 	                       panel.add(endDateLabel);
 			        panel.add(endDateField);
 		                
