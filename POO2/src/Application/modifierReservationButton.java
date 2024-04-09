@@ -15,14 +15,13 @@ JFrame nframe = new JFrame("Liste des réservations");
 	             JPanel npanel = new JPanel();
 	             npanel.setLayout(new BoxLayout(npanel, BoxLayout.Y_AXIS));
 
-	          
-	           // a changer 
-	             // add something here
-	           /*  for (String reservation : reservations) {  */
+	
+			 List<Reservation>  reservations = filereaderredervation.readReservationsFromFile();
+	            for (Reservation reservation : reservations) { 
 	                 JPanel reservationPanel = new JPanel();
 	                 reservationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-	                 JLabel reservationLabel = new JLabel(reservation);                              
+	                 JLabel reservationLabel = new JLabel(reservation.toString();                              
 	                 JButton modifierButton = new JButton("Modifier mes dates");
 	                 JButton annulerButton = new JButton("Annuler la réservation");
 
@@ -44,21 +43,20 @@ JFrame nframe = new JFrame("Liste des réservations");
 	                             public void actionPerformed(ActionEvent e) {
 	                                 String debutText = debutField.getText();
 	                                 String finText = finField.getText();
-
-	                                /* SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	                                 try {
+                                                Datee debut =  Datee.toDatee(debutText);
+	                                         Datee fin = Datee.toDatee(finText);
+	                              
+	                              
 	                                     Date debutDate = sdf.parse(debutText);
 	                                     Date finDate = sdf.parse(finText);
                                             // je dois mettre la chambre id or something from the reservation
-	                                     if ( Chambre.getdisponibiltéchambre(debutDate,finDate)) {
+	                                     if ( reservation.c.getdisponibiltéchambre(debut,fin)) {
 	                                         JOptionPane.showMessageDialog(frame, "Réservation enregistrée !");
 	                                     } else {
 	                                         JOptionPane.showMessageDialog(frame, "Chambre indisponible.");
 	                                     }
-	                                 } catch (ParseException ex) {
-	                                     JOptionPane.showMessageDialog(frame, "Format de date invalide. Utilisez dd/MM/yyyy.");
-	                                 } 
-	                             }*/
+	                            
+	                             }
 	                         });
 
 	                         panel.add(debutLabel);
