@@ -68,7 +68,7 @@ public nouvelleReservationButton() {
                                      public void actionPerformed(ActionEvent e) {
                                          // Code pour réserver la chambre
                                     	 // je suis pas sur 
-                                    	 Rerservation rerservation = new Rerservation(startDateField,endDateField,chambre,ID);
+                                    	 Rerservation rerservation = new Rerservation(StartDateField,EndDateField,chambre,ID);
                                          JOptionPane.showMessageDialog(frame, "Chambre " + chambre.getNumero() + " réservée !");
                                           AddLineInFile("Reservations_clients", 1,rerservation);
 				     }
