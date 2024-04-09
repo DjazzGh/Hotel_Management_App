@@ -76,8 +76,14 @@ JFrame nframe = new JFrame("Liste des réservations");
 	                     @Override
 	                     public void actionPerformed(ActionEvent e) {
 	                         // Code pour annuler la réservation
-	                    	 Fichier.deleteLineContainingWord("Reservations_Clients",reservation.toString());
+                                try {
+	                    		
+	                    	Fichier.deleteLineContainingWord("Reservations_Clients",reservation.toString());
 	                         JOptionPane.showMessageDialog(nframe, "Réservation annulée : " + reservation);
+	                    	} catch ( Exception a)
+	                    	{
+	                    		System.out.println(a.getMessage());
+	                    	}
 	                     }
 	                 });
 
