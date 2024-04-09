@@ -41,7 +41,7 @@ public nouvelleReservationButton() {
 			        panel.add(endDateField);
 			        mframe.add(panel);
                     
-                    if ( Date.avant(startDateField,endDateLabel)== false)
+                    if ( Date.avant(startDateField,endDateField)== false)
                     {
                     	JOptionPane.showMessageDialog(null, "Format de date invalide", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
@@ -55,7 +55,7 @@ public nouvelleReservationButton() {
                              panel1.setLayout(new GridLayout(0, 2));
                              // affichage depuis le fichier 
                            ArrayList  <Chambre> listChambres = new ArrayList <>();
-                             ChambreFileReader.readChambresFromFile(Chambres);
+                             listChambres= ChambreFileReader.readChambresFromFile(Chambres);
                              for (Chambre chambre :listChambres()) {
                                  JLabel label = new JLabel("Chambre " + chambre.getNumero() + ", Type: " + chambre.getTypeChambre() + ", Prix: " + chambre.getPrix());
                                  JButton reserverButton = new JButton("+");
@@ -64,9 +64,10 @@ public nouvelleReservationButton() {
                                      public void actionPerformed(ActionEvent e) {
                                          // Code pour réserver la chambre
                                     	 // je suis pas sur 
-                                    	 Rerservation rerservation = new Rerservation(debut,fin,chambre,int ID);
+                                    	 Rerservation rerservation = new Rerservation(startDateField,endDateField,chambre,ID);
                                          JOptionPane.showMessageDialog(frame, "Chambre " + chambre.getNumero() + " réservée !");
-                                     }
+                                          AddLineInFile("Reservations_clients", 1,rerservation);
+				     }
                                  });
 
                                  panel.add(label);
