@@ -348,9 +348,9 @@ public class RentButtonFrame extends javax.swing.JFrame {
         	        options.setResizable(false);
         	        options.setVisible(true);
         	        
-        	        JButton jButton1 = new javax.swing.JButton();
-        	        JButton jButton2 = new javax.swing.JButton();
-        	        JButton jButton3 = new javax.swing.JButton();
+        	        nouvelleReservationButton jButton1= new nouvelleReservationButton();
+        	        modifierReservationButton jButton2 = new modifierReservationButton();
+        	        consulterReservationButton jButton3 = new consulterReservationButton();
 
         	        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
