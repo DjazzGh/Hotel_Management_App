@@ -180,6 +180,20 @@ public static String findLineWithoutWord(String filePath, String excludedWord) t
 
         return null; 
     }
+	public static ArrayList<String> findalltheLinesContainingWord(String filename, String word) throws IOException {
+        ArrayList<String> lines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+          String line;
+          while ((line = reader.readLine()) != null) {
+            if (line.contains(word)) {
+                lines.add(line);
+              
+            }
+          }
+        return lines;
+        }
+      
+      } 
 	public static void main(String [] args) throws FileNotFoundException{
 		/*
 		Pour les methodes qui ont throws IOException a la fin, il faut les appeler de cette facon :
