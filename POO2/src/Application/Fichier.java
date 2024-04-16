@@ -166,7 +166,20 @@ public class Fichier {
             System.out.println("Error replacing line in file!");
         }
     }
+public static String findLineWithoutWord(String filePath, String excludedWord) throws IOException {
+        String line;
+        String regex = "(?!.*\\b" + excludedWord + "\\b)";  
 
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            while ((line = reader.readLine()) != null) {
+                if (line.matches(regex)) {
+                    return line;
+                }
+            }
+        }
+
+        return null; 
+    }
 	public static void main(String [] args) throws FileNotFoundException{
 		/*
 		Pour les methodes qui ont throws IOException a la fin, il faut les appeler de cette facon :
