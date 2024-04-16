@@ -57,11 +57,11 @@ public nouvelleReservationButton() {
                     		public void actionPerformed(ActionEvent e) {
                          JPanel panel1 = new JPanel();
                              panel1.setLayout(new GridLayout(0, 2));
-                             // affichage depuis le fichier 
-                          
+                             
+                  
 			     ArrayList<Chambre> chambredisponible = Fichier.findalltheLinesContainingWord("Chambres",disponible);
-                             for (Chambre chambre :listChambres()) {
-                                 JLabel label = new JLabel("Chambre " + chambre.getNumero() + ", Type: " + chambre.getTypeChambre() + ", Prix: " + chambre.getPrix());
+                             for (String chambre : chambresdisponibles()) {
+                                 JLabel label = new JLabel(chambre);
                                  JButton reserverButton = new JButton("+");
                                  reserverButton.addActionListener(new ActionListener() {
                                      @Override
