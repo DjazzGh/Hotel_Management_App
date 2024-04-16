@@ -58,8 +58,8 @@ public nouvelleReservationButton() {
                          JPanel panel1 = new JPanel();
                              panel1.setLayout(new GridLayout(0, 2));
                              // affichage depuis le fichier 
-                           ArrayList  <Chambre> listChambres = new ArrayList <>();
-                             listChambres= ChambreFileReader.readChambresFromFile(Chambres);
+                          
+			     ArrayList<Chambre> chambredisponible = Fichier.findalltheLinesContainingWord("Chambres",disponible);
                              for (Chambre chambre :listChambres()) {
                                  JLabel label = new JLabel("Chambre " + chambre.getNumero() + ", Type: " + chambre.getTypeChambre() + ", Prix: " + chambre.getPrix());
                                  JButton reserverButton = new JButton("+");
@@ -89,8 +89,7 @@ public nouvelleReservationButton() {
                           retourButton.addActionListener(new ActionListener() {
                               @Override
                               public void actionPerformed(ActionEvent e) {
-                                  ((JButton)e.getSource()).getRootPane().getParent().setVisible(false); // Cache la fenêtre principale
-                                  inscriptionFrame.setVisible(true); // Affiche la fenêtre d'inscription
+                                  mframe.dispose();
                              
    
                           } });
