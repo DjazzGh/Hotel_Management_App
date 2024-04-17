@@ -82,7 +82,27 @@ public class Client extends Utilisateur {
 	     else {
 	        System.out.println("Reservation impossible");}}
 	    
-	
+		public static Client creerClient(String[] champs) throws NumeroTelephone{
+		  if (champs.length < 6) {
+			    throw new IllegalArgumentException("Champs array must have at least 6 elements");
+			  }
+		  
+		 String nom = champs[1];
+		 String prenom = champs[2];
+		 String email = champs[3];
+		 String numeroTelephone = champs[4];
+
+		  if (numeroTelephone == null || numeroTelephone.isEmpty()) {
+		    throw new IllegalArgumentException("Numero de telephone cannot be null or empty");
+		  }
+		 String[] dateChamps = champs[5].split("/");
+		 int jour = Integer.parseInt(dateChamps[0]);
+		 int mois = Integer.parseInt(dateChamps[1]);
+		 int annee = Integer.parseInt(dateChamps[2]);
+
+		 Datee dateNaissance = new Datee(jour, mois, annee); // Adaptez la construction de la date si nécessaire
+		 return new Client(nom, prenom, email, numeroTelephone, dateNaissance);
+		}
 
 	
 	public void AnnulerReservation(Reservation r) {
@@ -94,11 +114,7 @@ public class Client extends Utilisateur {
 			System.out.println("Erreur");
 		}
 	}
-	public String Feedback() {
-		Scanner sc = new Scanner(System.in);
-		return sc.next();
-		
-	}
+	
 	 public String getUsername() {
 		return NomUtilisateur;}
 		 public String getPassword() {
