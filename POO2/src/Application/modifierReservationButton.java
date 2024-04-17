@@ -11,21 +11,28 @@ public class modifierReservationButton extends JButton{
 		
 		addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-JFrame nframe = new JFrame("Liste des réservations");
+ JFrame nframe = new JFrame("Liste des réservations");
 	             JPanel npanel = new JPanel();
 	             npanel.setLayout(new BoxLayout(npanel, BoxLayout.Y_AXIS));
 
-	
-			 List<Reservation>  reservations = filereaderredervation.readReservationsFromFile();
-	            for (Reservation reservation : reservations) { 
+	         
+	          
 	                 JPanel reservationPanel = new JPanel();
 	                 reservationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-	                 JLabel reservationLabel = new JLabel(reservation.toString();                              
-	                 JButton modifierButton = new JButton("Modifier mes dates");
+	                 String a = RentButton.line_ID;
+	                 char []a2 = a.toCharArray();
+	                 char IDchar = a2[0];
+	                 String ID = String.valueOf(IDchar);
+	                     
+              
+                ArrayList<String> reservationamodifier = Fichier.findalltheLinesContainingWord("Reservations_Clients",ID);
+                for( String reservation : reservationamodifier ) {
+	                 JLabel reservationLabel = new JLabel( reservation);                              
+	                 JButton modifierdatesButton = new JButton("Modifier mes dates");
+	                 JButton modifierchambresButton = new JButton("Modifier mes chambres");
 	                 JButton annulerButton = new JButton("Annuler la réservation");
 
-	                 modifierButton.addActionListener(new ActionListener() {
+	                 modifierdatesButton.addActionListener(new ActionListener() {
 	                     @Override
 	                     public void actionPerformed(ActionEvent e) {
 	                      
@@ -37,23 +44,74 @@ JFrame nframe = new JFrame("Liste des réservations");
 	                         JLabel finLabel = new JLabel("Date de fin (dd/MM/yyyy) :");
 	                         JTextField finField = new JTextField();
 	                         JButton validerButton = new JButton("Valider");
-
+	                         JButton ValiderButton = new JButton("valider");
+	                       
+	                         
 	                         validerButton.addActionListener(new ActionListener() {
 	                             @Override
 	                             public void actionPerformed(ActionEvent e) {
 	                                 String debutText = debutField.getText();
 	                                 String finText = finField.getText();
-                                                Datee debut =  Datee.toDatee(debutText);
-	                                         Datee fin = Datee.toDatee(finText);
-	                              
-	                                     if ( reservation.c.getdisponibiltéchambre(debut,fin)) {
+                                             Datee debut =  Datee.toDatee(debutText);
+	                                         Datee fin = Datee.toDatee(finText);	
+                                         
+	                                         boolean valide = Datee.avant(debut, fin);
+	                                         if(!valide) {
+	                                        	 JOptionPane.showMessageDialog(frame," les dates invalide");
+	                                         }
+	                                         
+	                                         else {	
+	                                        	 String[] parts = reservation.split(" ");
+
+	                                        	
+	                                        	 String datedebut = parts[1];
+	                                        	 String datefin = parts[2];
+	                                        	 String chambre = parts[3];
+	             
+	                                        	
+	                             
+	                                        	if( Client.DemandeReservation(ID,datedebut, datefin,chambre) ==true) {
 	                                         JOptionPane.showMessageDialog(frame, "Réservation enregistrée !");
-	                                     } else {
-	                                         JOptionPane.showMessageDialog(frame, "Chambre indisponible.");
-	                                     }
-	                            
-	                             }
+	                                         Client.ModifierDateReservation(ID, datedebut, datefin, chambre ); 
+	                                         
+	                                        	} else {
+	                                         JOptionPane.showMessageDialog(frame, "Chambre indisponible.");}
+	                               
+	                            }
+	                           }   
 	                         });
+	                         modifierchambresButton.addActionListener(new ActionListener() {
+	    	                     @Override
+	    	                     public void actionPerformed(ActionEvent e) {
+	    	                    	 JFrame framechambre = new JFrame();
+	    	                    	 framechambre.setVisible(true);
+	    	                    	   ArrayList<String> chambresdisponibles = Fichier.findalltheLinesContainingWord("Chambres","Disponible");
+	    	                        
+	    	                           
+	    	                           for (String nouvellechambre  :chambresdisponibles){
+	    	                                         JLabel label = new JLabel(nouvellechambre);
+	    	                                         JButton reserverButton = new JButton("+");
+	    	                                         JPanel panelchambre = new JPanel();
+	    	                                         panelchambre.add(label);
+	    	                                         panelchambre.add(reserverButton);
+	    	                                         framechambre.add( panelchambre);
+	    	                                     
+	    	                                         reserverButton.addActionListener(new ActionListener() {
+	    	                                             @Override
+	    	                                             public void actionPerformed(ActionEvent e) {
+	    	                                               
+	    	                                            	 String[] parts = reservation.split(" ");
+    
+	    		                                        	 String chambre = parts[3];
+	    	                                                 JOptionPane.showMessageDialog(framechambre, "Chambre réservée !");
+	    	                                                Fichier.replaceWordInFile("Chambres", chambre,nouvellechambre);
+	    	                                             }
+	    	                                         });
+
+	    	                           } } 
+	    	                     });
+	                         
+	                         
 
 	                         panel.add(debutLabel);
 	                         panel.add(debutField);
@@ -71,38 +129,43 @@ JFrame nframe = new JFrame("Liste des réservations");
 	                     
 	                     
 	                     });
+	                 
+	                 
 
 	                 annulerButton.addActionListener(new ActionListener() {
 	                     @Override
 	                     public void actionPerformed(ActionEvent e) {
 	                         // Code pour annuler la réservation
-                                try {
-	                    		
-	                    	Fichier.deleteLineContainingWord("Reservations_Clients",reservation.toString());
+	                    	 
+	                    
+	                    	 
+	                    	try {
+	                    	//	Client.AnnulerReservation(reservation);
+	                    	Fichier.deleteLineContainingWord("Reservations_Clients",reservation);
 	                         JOptionPane.showMessageDialog(nframe, "Réservation annulée : " + reservation);
 	                    	} catch ( Exception a)
 	                    	{
-	                    		System.out.println(a.getMessage());
+	                    		System.out.println("erreur");
 	                    	}
 	                     }
+	                     
 	                 });
 
 	                 reservationPanel.add(reservationLabel);
-	                 reservationPanel.add(modifierButton);
+	                 reservationPanel.add(modifierdatesButton);
+	                 reservationPanel.add(modifierchambresButton);
 	                 reservationPanel.add(annulerButton);
 
 	                 npanel.add(reservationPanel);
-	             }
-
+	          
+                }
 	             JScrollPane scrollPane = new JScrollPane(npanel);
 	             nframe.add(scrollPane);
 	             nframe.setSize(400, 300);
 	             nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	             nframe.setVisible(true);
-	       
 
-
-			
-	        } });
+		}	
+       } });
 	}
 }
