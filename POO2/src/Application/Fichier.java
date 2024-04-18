@@ -193,7 +193,19 @@ public static String findLineWithoutWord(String filePath, String excludedWord) t
         return lines;
         }
       
-      } 
+      }
+public static void remplacerMotLigneSpecifique(String fichier, int indexLigne, String motARemplacer, String motRemplacement) throws IOException {
+		String ligne = lireLigne(indexLigne, fichier); // Fonction fournie pour récupérer la ligne
+		if (ligne != null) {
+			String ligneModifiee = ligne.replace(motARemplacer, motRemplacement);
+			// Ecrire la ligne modifiée dans le fichier d'origine
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(fichier))) {
+				writer.write(ligneModifiee);
+			}
+		} else {
+			System.out.println("Ligne non trouvée à l'index : " + indexLigne);
+		}
+     }
 	public static void main(String [] args) throws FileNotFoundException{
 		/*
 		Pour les methodes qui ont throws IOException a la fin, il faut les appeler de cette facon :
