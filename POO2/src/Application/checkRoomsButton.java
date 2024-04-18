@@ -80,7 +80,7 @@ public checkRoomsButton() {
 
 
 			  JPanel p1=new JPanel(new GridLayout(1,2));
-			  for (int i = 0; i < 2; i++) {
+			  for (int i = 0; i <=2; i++) {
 				  JButton b1 = new JButton();
 				  if (i == 0) {
 					  b1.setText(" + ajouter des chambres");
@@ -148,7 +148,7 @@ public checkRoomsButton() {
 									  Chambre c = Administrateur.AjouterChambre1(Type.valueOf(j2.getText()), Double.parseDouble(j4.getText()));
 
 									  Fichier.addToFile("Chambres",c.toString());
-                                      Hotel.listChambres.add(c);
+                                                                          Hotel.listChambres.add(c);
 									  String[] columnNames = {"Numéro de la chambre", "type de la chambre", "disponibilite", "Prix"};
 									  JTable table = new JTable(new ChambreTableModel(Hotel.listChambres));
 									  for (int i = 0; i < columnNames.length; i++) {
@@ -234,7 +234,7 @@ public checkRoomsButton() {
 
 											  }
 										       String[] columnNames = {"Numéro de la chambre", "type de la chambre", "disponibilite", "Prix"};
-          	                                   JTable table = new JTable(new ChambreTableModel(Hotel.getListChambres()));
+          	                                                                       JTable table = new JTable(new ChambreTableModel(Hotel.getListChambres()));
 											    for (int i = 0; i < columnNames.length; i++) {
 												  table.getColumnModel().getColumn(i).setHeaderValue(columnNames[i]);
 											    }
@@ -255,6 +255,99 @@ public checkRoomsButton() {
 						 
 					  p1.add(b1);
 
+				  }
+				  if(i==2)
+				  {
+					   b1.setText("  modifier des chambres");
+					  b1.setBounds(250, 250, 250, 250);
+					  b1.setOpaque(true);
+					  b1.setBorderPainted(false);
+					  b1.setForeground(Color.white);
+					  b1.setFont(new Font("Georgia", Font.BOLD, 15));
+					  b1.setBackground(new Color(200, 0, 0));
+					  b1.addActionListener(new ActionListener() {
+						  @Override
+						  public void actionPerformed(ActionEvent e) {
+							  JFrame frameModifier = new JFrame("ajouter des chambres");
+							  frameModifier.setSize(450, 450);
+							  frameModifier.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+							  frameModifier.setVisible(true);
+							  frameModifier.getContentPane().setBackground(new Color(255, 255, 255));
+							  frameModifier.setLayout(new GridLayout(4, 1));
+							  frameModifier.getContentPane().setBackground(new Color(0, 50, 0));
+
+							  JLabel l1 = new JLabel(" numero de la chambre");
+							  l1.setFont(new Font("Georgia", Font.ROMAN_BASELINE, 19));
+							  l1.setForeground(Color.white);
+							  JTextField j1 = new JTextField();
+							  frameModifier.add(l1);
+							  frameModifier.add(j1);
+
+							  JLabel l2 = new JLabel(" prix precedents de la chambre");
+							  l2.setFont(new Font("Georgia", Font.ROMAN_BASELINE, 19));
+							  l2.setForeground(Color.white);
+							  JTextField j2 = new JTextField();
+							  frameModifier.add(l2);
+							  frameModifier.add(j2);
+
+							  JLabel l3 = new JLabel(" le nouveau prix de la chambre");
+							  l3.setFont(new Font("Georgia", Font.ROMAN_BASELINE, 13));
+							  l3.setForeground(Color.white);
+							  JTextField j3 = new JTextField();
+							  frameModifier.add(l3);
+							  frameModifier.add(j3);
+
+							  JButton b4 = new JButton();
+							  b4.setText(" valider");
+							  b4.setBounds(300, 300, 300, 300);
+							  b4.setOpaque(true);
+							  b4.setBorderPainted(false);
+							  b4.setForeground(Color.white);
+							  b4.setFont(new Font("Georgia", Font.BOLD, 30));
+							  b4.setBackground(new Color(200, 0, 0));
+
+							  frameModifier.add(b4);
+							  b4.addActionListener(new ActionListener() {
+								  @Override
+								  public void actionPerformed(ActionEvent e) {
+									  JFrame frameValider = new JFrame("valider");
+									  frameValider.setVisible(true);
+									  frameValider.setSize(450, 450);
+									  frameValider.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+									  frameValider.setVisible(true);
+									  frameValider.getContentPane().setBackground(new Color(255, 255, 255));
+                                                                                try {
+										  int n=Fichier.findLineNumberWithWord("Chambres",j1.getText());
+										  Fichier.remplacerMotLigneSpecifique("Chambres",n,j2.getText(),j3.getText());
+										  Hotel.listChambres.get(n-1).setPrix(Double.parseDouble(j3.getText()));
+
+										  String [] columnNames = {"Numéro de la chambre", "type de la chambre", "disponibilite", "Prix"};
+										  JTable table = new JTable(new ChambreTableModel(Hotel.getListChambres()));
+										  for (int i = 0; i < columnNames.length; i++) {
+											  table.getColumnModel().getColumn(i).setHeaderValue(columnNames[i]);
+										  }
+										  JScrollPane scrollPane = new JScrollPane(table);
+										  JPanel panel11 = new JPanel();
+										  panel11.setBounds(500, 500, 500, 500);
+										  panel11.setBackground(Color.white);
+										  panel11.setLayout(new BorderLayout());
+										  panel11.add(scrollPane, BorderLayout.NORTH);
+										  frameValider.add(panel11);
+
+                                                                                  } catch (IOException ex) {
+                                                                                    throw new RuntimeException(ex);
+                                                                                  }
+
+
+								  }
+							  });
+
+
+
+
+						  }
+					  });
+					  p1.add(b1);
 				  }
 
 				  
