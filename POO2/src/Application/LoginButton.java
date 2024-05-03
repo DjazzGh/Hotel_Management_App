@@ -30,7 +30,7 @@ public class LoginButton extends JFrame {
            setSize(400,300);
     	   setResizable(false);
            setVisible(true);
-           setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+          // setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
    
                 JTextField jTextField1 = new javax.swing.JTextField();
                 JPasswordField jPasswordField1 = new javax.swing.JPasswordField();
@@ -135,7 +135,7 @@ public class LoginButton extends JFrame {
 			        	        JButton CheckClients = new javax.swing.JButton();
 			        	        checkRoomsButton jButton2 = new checkRoomsButton();
 
-			        	        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+			        	       // setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 			        	        CheckClients.setBackground(Color.white);
 			        	        CheckClients.setFont(new java.awt.Font("Kannada MN", 1, 16)); 
@@ -189,12 +189,12 @@ public class LoginButton extends JFrame {
 			        	        
 			        	        CheckClients.addActionListener(new ActionListener() {
 									  public void actionPerformed(ActionEvent e) {
-										  JFrame frameClients = new JFrame("liste de clients");
+										  JFrame frameClients = new JFrame("List of customers");
 										  frameClients.setSize(800, 450);
 										  frameClients.setVisible(true);
 										  frameClients.getContentPane().setBackground(new Color(255, 255, 255));
 										  frameClients.setLayout(new GridLayout(2, 1));
-										  frameClients.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+										  //frameClients.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
 										  try (BufferedReader br = new BufferedReader(new FileReader("Clients"))) {
@@ -254,7 +254,7 @@ public class LoginButton extends JFrame {
 											  public void actionPerformed(ActionEvent e) {
 												  JFrame frameRecuperer = new JFrame("Get client's ID");
 												  frameRecuperer.setSize(400, 160);
-												  frameRecuperer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+												 // frameRecuperer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 												  frameRecuperer.setVisible(true);
 												  frameRecuperer.getContentPane().setBackground(Color.white);
 												  frameRecuperer.setLayout(new GridLayout(2, 2));
@@ -277,9 +277,10 @@ public class LoginButton extends JFrame {
 												  bb.addActionListener(new ActionListener() {
 													
 													  public void actionPerformed(ActionEvent e) {
+														  if(t.getText().matches("\\d+")) {
 														  JFrame framereservation = new JFrame("The client's reservations");
 														  framereservation.setSize(450, 250);
-														  framereservation.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+														 // framereservation.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 														  framereservation.setVisible(true);
 														  framereservation.getContentPane().setBackground(new Color(255, 255, 255));
 
@@ -306,7 +307,11 @@ public class LoginButton extends JFrame {
 
 		                                                  } catch (IOException ex) {
 		                                                      throw new RuntimeException(ex);
+		                                                  } 
+		                                                  }else {
+		                                                	  JOptionPane.showMessageDialog(null, "You have to enter a number !", "Wrong Entry", JOptionPane.WARNING_MESSAGE);
 		                                                  }
+		                                                  
 
 
 													  }
@@ -327,3 +332,4 @@ public class LoginButton extends JFrame {
 
 						  }  });
     }} 
+
