@@ -1,7 +1,5 @@
  package Application;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 public class Client extends Utilisateur {
 	int ID;
 	String Nom;
@@ -22,67 +20,18 @@ public class Client extends Utilisateur {
 		this.ID=D;
 		D++;
 	}
-	
-	/*public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Datee datenaissance,int ID)throws NumeroTelephone{
+	public Client(String Nom,String Prenom,String Email,String NumeroTelephone,Datee datenaissance){
 		this.Nom=Nom;
 		this.Prenom=Prenom;
 		this.Email=Email;
-		if( NumeroTelephone.length()!= 10 || !NumeroTelephone.startsWith("0") )
-		{
-			throw new  NumeroTelephone();
-		}
 		this.NumeroTelephone=NumeroTelephone;
-		//l faut faire une exception
-		//this.datenaissance=datenaissance;
+		this.datenaissance=datenaissance;
 		this.ID=D;
 		D++;
-	}*/
-	
-	public static boolean DemandeReservation(int ID,Datee debut, Datee fin,Chambre ch) {
-		Demande d1=new Demande(ID,debut, fin,ch);
-		if(Administrateur.TraiterDemande(d1)==true) {
-			return true;			
-		}else {
-			return false;
-		}
 	}
 	
-	public static void ModifierDateReservation(int ID, Datee debut, Datee fin, Chambre c) {
-	    Demande d2 = new Demande(ID, debut, fin, c);
-	    if (Administrateur.TraiterDemande(d2) == true) {
-	    	try {
-	    	int a = Fichier.findLineNumberWithWord("Reservations_Clients", String.valueOf(ID));
-	    	int b = Fichier.findLineNumberWithWord("Reservations_Clients", c.toString());
-	    	if(a==b) {  	
-	    	String line=Fichier.lireLigne(a, "Reservations_Clients");
-	    	String nouvelleReservation= String.valueOf(ID)+" "+debut.toString()+" "+" "+fin.toString()+" "+c.toString();
-	    	Fichier.replaceWordInFile("Reservations_Clients", line,nouvelleReservation );}}
-	    	catch(IOException e) {
-	    		System.out.println("Erreur");
-	    	}
-	        }
-	     else {
-	        System.out.println("Reservation impossible");
-	    }
-	}
 
-	
-	public static void ModifierChambreReservation(int ID, Datee debut, Datee fin, Chambre c) {
-	    Demande d3 = new Demande(ID, debut, fin, c);
-	    String reservation_a_changer=String.valueOf(ID)+" "+debut+" "+fin;
-	    if (Administrateur.TraiterDemande(d3) == true) {   
-	    	try {
-	    	String line=Fichier.findLineContainingWord("Reservations_Clients",reservation_a_changer );	    	
-	    	String nouvelleReservation= String.valueOf(ID)+" "+debut.toString()+" "+" "+fin.toString()+" "+c.toString();
-	    	Fichier.replaceWordInFile("Reservations_Clients", line,nouvelleReservation );}
-	    	catch(IOException e) {
-	    		System.out.println("Erreur");
-	    	}
-	        }
-	     else {
-	        System.out.println("Reservation impossible");}}
-	    
-		public static Client creerClient(String[] champs) throws NumeroTelephone{
+	public static Client creerClient(String[] champs) throws NumeroTelephone{
 		  if (champs.length < 6) {
 			    throw new IllegalArgumentException("Champs array must have at least 6 elements");
 			  }
@@ -103,22 +52,81 @@ public class Client extends Utilisateur {
 		 Datee dateNaissance = new Datee(jour, mois, annee); // Adaptez la construction de la date si nécessaire
 		 return new Client(nom, prenom, email, numeroTelephone, dateNaissance);
 		}
-
 	
-	public void AnnulerReservation(Reservation r) {
-		try {
-		Fichier.deleteLineContainingWord("Reservations_Clients", r.toString());
-		r.c.setDisponibilitétrue(r.debut, r.fin);
-		}
-		catch(IOException e) {
-			System.out.println("Erreur");
+	public static boolean DemandeReservation(int ID,Datee debut, Datee fin,Chambre ch) {
+		Demande d1=new Demande(ID,debut, fin,ch);
+		if(Administrateur.TraiterDemande(d1)==true) {
+			return true;			
+		}else {
+			return false;
 		}
 	}
 	
+	public static void ModifierDateReservation(int ID, Datee debut, Datee fin, Chambre c) {
+	    Demande d2 = new Demande(ID, debut, fin, c);
+	 
+	    	try {
+	    	int a = Fichier.findLineNumberWithPrefix("Reservations_Clients", String.valueOf(ID));
+	    	int b = Fichier.findLineNumberWithLastWord("Reservations_Clients", String.valueOf(c.getnumerochambre()));
+	    	if(a==b) {  	
+	    	String line=Fichier.lireLigne(a, "Reservations_Clients");
+	    	String nouvelleReservation= String.valueOf(ID)+" "+debut.toString()+" "+fin.toString()+" "+String.valueOf(c.getnumerochambre());
+	    	Fichier.addToFile("Reservations_Clients", nouvelleReservation);
+	    	Fichier.deleteLineContainingWord("Reservations_Clients", line);}}
+	    	catch(IOException e) {
+	    		System.out.println("Erreur");
+	    	}
+	        }
+	     
+	
+
+	
+	public static void ModifierChambreReservation(int ID, Datee debut, Datee fin, Chambre c,String numerochambre) {
+	    Demande d3 = new Demande(ID, debut, fin, c);
+	    String reservation_a_changer=String.valueOf(ID)+" "+Datee.formatDate(debut.toString())+" "+Datee.formatDate(fin.toString())+" "+numerochambre;
+	    if (Administrateur.TraiterDemande(d3) == true) {   
+	    	try {
+
+	    	String line=Fichier.findLineContainingWord("Reservations_Clients",reservation_a_changer);
+	    	//System.out.println(line);
+	    	Fichier.deleteLineContainingWord("Reservations_Clients", line);
+	    	String nouvelleReservation= String.valueOf(ID)+" "+Datee.formatDate(debut.toString())+" "+Datee.formatDate(fin.toString())+" "+c.getnumerochambre();
+	    	Fichier.addToFile("Reservations_Clients", nouvelleReservation);	    	
+	    	
+	    	}
+	
+	    	catch(IOException e) {
+	    		System.out.println("Erreur");
+	    	}
+	        }
+	     else {
+	        System.out.println("Reservation impossible");}}
+	    
+	
+
+	
+	public static void AnnulerReservation(Reservation r) {
+	    try {
+
+	       Fichier.deleteLineContainingWord("Reservations_Clients", r.toString());
+	       Chambre.updateRoomavailability(r.c.numero);
+	    } catch (IOException e) {
+	       System.out.println("Erreur");
+	    }
+	}
+
+	
+	 
+	 
 	 public String getUsername() {
 		return NomUtilisateur;}
 		 public String getPassword() {
 		  return motdepasse;}
 		 public String toString() {
 			 return ID+" "+Nom+" "+Prenom+" "+Email+" "+NumeroTelephone+" "+datenaissance+" "+NomUtilisateur+" "+motdepasse;
-		 }}
+		 }
+	
+		 
+		 
+
+}
