@@ -1,6 +1,8 @@
 package Application;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Chambre {
@@ -17,12 +19,29 @@ public class Chambre {
 		  this.typechambre =typechambre;
 		  this.prix=prix;
 	  }
+
+	  
+	  
+	  public Chambre(int num,Type typechambre,double prix) {
+		  this.numero=num;
+		  this.typechambre =typechambre;
+		  this.prix=prix;
+	  }
 	  
 	  public int getnumerochambre() {
-		  return numero;
+		  return this.numero;
+	  }
+	  public int getNumero() {
+		  return this.numerochambre;
 	  }
 	  public Type gettypechambre() {
 		  return typechambre;
+	  }
+	  public void setNumero(int num) {
+		  this.numero=num;
+	  }
+	  public HashMap<Datee,Datee> getDisponibilitéDansLeTemps(){
+		  return DisponibilitéDansLeTemps;
 	  }
 	  
 	  public boolean getdisponibiltéchambre(Datee debut, Datee fin) {
@@ -32,8 +51,9 @@ public class Chambre {
 		  for (Map.Entry<Datee, Datee> entry : DisponibilitéDansLeTemps.entrySet()) {
 		    // Vérification de la clé
 		    if (entry.getKey().toString().equals(cléRecherchée.toString()) &&entry.getValue().toString().equals(valeurRecherchée.toString() )) {
+		     return false;}
+		    if(Datee.entre(entry.getKey(),entry.getValue(),cléRecherchée,valeurRecherchée )==true) {
 		     return false;
-		     
 		  }}return true;  
 	  }
 	  
@@ -54,26 +74,74 @@ public class Chambre {
 	  public void setPrix(double p) {
 		  this.prix=p;
 	  }
-	  public static String afficherHashMap(HashMap<Datee,Datee> map) { // Assuming String keys and values
+	  public String afficherHashMap(HashMap<Datee,Datee> map) { 
 	       
 			    if (map.isEmpty()) {
-			        return "Disponible"; // More descriptive message
+			        return "Dates: Vide"; 
 			    } else {
-			        StringBuilder sb = new StringBuilder("Dates réservés: ");
+			        StringBuilder sb = new StringBuilder("Dates:");
 			        for (Map.Entry<Datee, Datee> entry : map.entrySet()) {
-			            Datee key = entry.getKey();
-			            Datee value = entry.getValue();
-			            sb.append("Début: ").append(key.toString()).append("- Fin: ").append(value.toString()).append(" ");
-			        }
+			        	 Datee key = entry.getKey();
+				            Datee value = entry.getValue();
+				            sb.append(" Début: ").append(Datee.formatDate(key.toString())).append("-Fin: ").append(Datee.formatDate(value.toString())).append(" ");
+				        }
 			        return sb.toString();
 			    }
 			}
 
 	    
 	  
-	  public String toString() {
+	  public String toString1() {
 
-		  return numero + " "+ typechambre+" "+ afficherHashMap(DisponibilitéDansLeTemps)+" "+prix+" ";
+		  return numero + " "+ typechambre+" "+prix+" " +afficherHashMap(DisponibilitéDansLeTemps);
+	  }
+	  public String toString2() {
+
+		  return numerochambre + " "+ typechambre+" "+prix;
+	  }
+	  
+	  public static void updateRoomavailability(int c) {
+		List<String> liste= Fichier.findLinesWithLastWord("Reservations_Clients", String.valueOf(c));
+		String dispo="";
+		 if (liste.isEmpty()) {
+			     dispo="Vide"; // Room is available if no reservations found
+			  }
+
+			 
+			  for (String line : liste) {
+			    String[] parts = line.split("\\s+", 4); // Split on whitespace, limit to 3 parts
+			    if (parts.length >= 3) {
+			        String startDate = parts[1];
+			        String endDate = parts[2];
+			        dispo += "Début: " + startDate + "-Fin: " + endDate + " ";
+			      }
+			  }
+
+			  String l=Fichier.findFirstLineWithPrefix("Chambres",String.valueOf(c) );
+			  String parts[]=l.split("Dates: ");
+			  //parts[1]=dispo;
+			  String newline=parts[0]+"Dates: "+dispo+"\n";
+			  try {
+			  Fichier.replaceLineInFile("Chambres", l, newline);}
+			  catch(IOException ex) {
+				  System.out.println("Erreur");
+			  }
+			
+	  }
+	  
+	  public static void main(String [] args) {
+		  
+		  Chambre.updateRoomavailability(2);
+		 /* List<String> liste= Fichier.findLinesWithLastWord("Reservations_Clients", "2");
+		  for (String line : liste) {
+              System.out.println(line);
+          }
+		  try {
+		  Fichier.replaceLineInFile("Chambres", "4 Simple 150.0 Dates: NOT Vide", "4 Simple 150.0 Dates: Vide");}
+		  catch(IOException ex) {
+			  System.out.println("Erreur");
+		  }*/
+		  
 	  }
 
 }
