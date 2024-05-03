@@ -1,55 +1,59 @@
 package Application;
 
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-//import javax.swing.BorderLayout;
+
+
   class modifierReservationButton extends JButton  {
 	  Datee debut;
 	  Datee fin ;
+	  static boolean modifier;
 	public modifierReservationButton() {
 		super("Modifier mes réservations");
 		addActionListener(new ActionListener() {
-		 @Override
-	     public void actionPerformed(ActionEvent e) {
+	 public void actionPerformed(ActionEvent e) {
 	        
-	 JFrame nframe = new JFrame("Liste des réservations");
-	 nframe.setSize(200, 300);
-	        	  nframe.setVisible(true);
-	           JPanel npanel = new JPanel();
-	             npanel.setLayout(new BoxLayout(npanel, BoxLayout.Y_AXIS));
+	   JFrame nframe = new JFrame("listes des réservations");
+	   nframe.setSize(1000, 400);
+	   nframe.setResizable(true);
 
-	                 JPanel reservationPanel = new JPanel();
-	                 reservationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-	              String a = RentButtonFrame.line_ID;
-	               char []a2 = a.toCharArray();
-	              char IDchar = a2[0];
-	               String ID = String.valueOf(IDchar);
-	            //  String ID ="2";     
-           List<String> reservationamodifier = Fichier.findalltheLinesContainingWord("Reservations_Clients",ID);
+	  
+	   String ID = RentButtonFrame.line_ID;
+	         int firstSpaceIndex = ID.indexOf(' ');
+	         String extractedID;
+
+	         if (firstSpaceIndex != -1) {
+	           extractedID = ID.substring(0, firstSpaceIndex);
+	         } else {
+	           extractedID = ID;
+	         }
+	         System.out.println(extractedID);
+	              
+         try { List<String> reservationamodifier = Fichier.findLinesWithPrefix("Reservations_Clients",extractedID);
                 
-	          
-           DefaultTableModel model = new DefaultTableModel(new String[]{"Id Client", "Date Begining", "Date End", "Room Number", "Modifier chambre", "Modifier date", " annuler la reservation",}, 0) {
+           DefaultTableModel model = new DefaultTableModel(new String[]{"Id Client", "Date Begining", "Date End", "Room Number", "Change room", "Change date", " Cancel reservation",}, 0) {
                @Override
                public Class<?> getColumnClass(int columnIndex) {
-                   int columIndex;
-				if (columnIndex == 4 || columnIndex == 5 || columIndex == 6 ) {
+              if (columnIndex == 4 || columnIndex == 5 || columnIndex == 6 ) {
                        return Boolean.class; // Column type is Boolean for checkboxes
                    }
                    return super.getColumnClass(columnIndex);
@@ -57,208 +61,300 @@ import javax.swing.table.DefaultTableModel;
 
                @Override
                public boolean isCellEditable(int row, int column) {
-                   int columIndex;
-				return column == 4 || column == 5|| columIndex == 6; // Allow editing only for checkboxes
+             	return column == 4 || column == 5 || column == 6; // Allow editing only for checkboxes
                }
            };
-
-           // Read data from file and add rows to table model
-           try (BufferedReader br = new BufferedReader(new FileReader("Reservations_Clients"))) {
-               String line;
-               while ((line = br.readLine()) != null) {
-                   String[] parts = line.split(",");
+           
+           
+           for (String reservation : reservationamodifier) {
+                   String[] parts = reservation.split(" ");
                    model.addRow(new Object[]{parts[0], parts[1], parts[2], parts[3], false, false,false});
                }
-           } catch (Exception ee) {
-               ee.printStackTrace();
-           }
+         
 
            JTable table = new JTable(model);
            JScrollPane scrollPane = new JScrollPane(table);
-       //   nframe.add(scrollPane, BorderLayout.CENTER);
+
            nframe.add(scrollPane);
-             for (int i = 0; i < model.getRowCount(); i++) {
-              Boolean modifierChambre = (Boolean) model.getValueAt(i, 4);
-              Boolean modifierDate = (Boolean) model.getValueAt(i, 5);
-            String  idd = (String) model.getValueAt(i, 0);
-            String datedebut  = (String) model.getValueAt(i, 1);
-            String  datefin = (String) model.getValueAt(i, 2);
-            String  numerochambree = (String) model.getValueAt(i, 3);
-            Boolean annulerreservation= (Boolean) model.getValueAt(i, 6);
+           nframe.setVisible(true);
+
             
-              if (modifierDate) {
-                  // Traiter la modification de chambre pour la ligne i
-                  System.out.println("Modifier chambre pour la ligne " + i);
-            
-             	 JFrame frame = new JFrame("modification de dates");
-                 JPanel panel = new JPanel(new GridLayout(3, 2));
-                 JLabel debutLabel = new JLabel("Date de début (dd/MM/yyyy) :");
-                 JTextField debutField = new JTextField();
-                 JLabel finLabel = new JLabel("Date de fin (dd/MM/yyyy) :");
-                 JTextField finField = new JTextField();
-                 JButton validerButton = new JButton("Valider");
-                 panel.add(debutLabel);
-                 panel.add(debutField);
-                 panel.add(finLabel);
-                 panel.add(finField);
-                 panel.add(new JLabel()); // Espace vide pour l'esthétique
-                 panel.add(validerButton);
-                 frame.add(panel);
-                 frame.setSize(400, 200);
-                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                 frame.setVisible(true);
-                 
-                 validerButton.addActionListener(new ActionListener() {
-                     @Override
-                     public void actionPerformed(ActionEvent e) {
-                         String debutText = debutField.getText();
-                         String finText = finField.getText();
-                                 Datee debut =  Datee.toDatee(debutText);
-                                 Datee fin = Datee.toDatee(finText);	
-                             
-                                 boolean valide = Datee.avant(debut, fin);
-                                 if(!valide) {
-                                	 JOptionPane.showMessageDialog(frame," les dates invalide");    }
-                                 else {	
-                                 String anciennedatedebut = datedebut;
-                                	 String anciennedatefin = datefin;
-                                	 String numerochambre = numerochambre ;
-                                	 String chambre = Fichier.findLineWithoutWord("Chambres",  numerochambre );
-                                	 String[] parts = chambre.split(" ");
+    		 model.addTableModelListener(new TableModelListener() {
+ 			    public void tableChanged(TableModelEvent e) {
+ 			        int row = e.getFirstRow();
+ 			        int column = e.getColumn();
+ 			        if (column == 4) { 
+ 			            Boolean checked = (Boolean) model.getValueAt(row, column);
+ 			            if (checked) {
+ 			            	String NUMERO = (String) model.getValueAt(row, 3); //numero de l'ancienne chambre
+ 			            	String datedeb  = (String) model.getValueAt(row, 1);
+ 			                String  datefi = (String) model.getValueAt(row, 2);
+ 			                
+ 			                
+ 			               String datedebut=Datee.formatDate(datedeb);
+ 			             String  datefin=Datee.formatDate(datefi);
+ 			                 JFrame framechambre = new JFrame("modifier chambre "); 			                 
+ 			                 framechambre.setSize(700, 400);
+ 			                 framechambre.setLayout(new BorderLayout());
+ 			                try {
+ 			              	  String periode="Début: "+datedebut+"-Fin: "+datefin;
+ 			                 List<String> chambres = Fichier.filterLines("Chambres",periode);
+ 			                 for (String chambre : chambres) {
+ 			              	    System.out.println(chambre);
+ 			              	}
+ 			                 Object[][] data = new Object[chambres.size()][4];
+ 			                 for (int j = 0; j < chambres.size(); j++) {
+ 			              	   
+ 			                     String chambre = chambres.get(j);
+ 			                     
+ 			            
+ 			                     if (chambre.equals("Dates: Vide")) {
+ 			                         continue; // Skip "Dates: Vide" line
+ 			                     }
+ 			                     
+ 			                     String[] parts = chambre.split(" ");
+ 			                     
+ 			                     // Handle cases with less than 2 parts
+ 			                     if (parts.length < 2 || parts[0].equals(NUMERO)) {
+ 			                         // You can handle lines with less than 2 parts here (e.g., print a message)
+ 			                         continue;
+ 			                     }
+ 			                     
+ 			                    
+ 			                	 String numero = parts[0];
+ 			                	 String type = parts[1];
+ 			                	 String prix = parts[2];
+ 			                     
+ 			                    
+ 			                     data[j][0] = numero;
+ 			                     data[j][1] = type;
+ 			                     data[j][2] =  prix;
+ 			                     data[j][3] = false; // Par défaut, les cases à cocher sont décochées
+ 			                     
+ 			               
+ 			                 }
+ 			                 
+ 			                 // Créer les noms de colonnes
+ 			                 String[] columnNamess = {"Number" ,"Type", "Price", "Réserver"};
 
-                                   	 String numero = parts[1];
-                                   	 String type = parts[2];
-                                   	 String prix = parts[4];
-                                   	double prixformedouble = Double.parseDouble(prix);
-                                   	Type typeformetype = Type.valueOf(type);
-                                	 Chambre chambreformechambre = new Chambre(typeformetype,prixformedouble);
-                                		int intID = Integer.parseInt(ID); 
-                                	if( Client.DemandeReservation(intID,debut, fin,chambreformechambre) ==true) {
-                                 JOptionPane.showMessageDialog(frame, "Réservation enregistrée !");
-                                 Client.ModifierDateReservation(intID,debut , fin , chambreformechambre ); 
-                                 
-                                	} else {
-                                 JOptionPane.showMessageDialog(frame, "Chambre indisponible.");}
-                    }     }     });
-              
-              
-             
-              }             
-              
-             
-              if (modifierChambre) {
-                  // Traiter la modification de date pour la ligne i
-                
-                  JFrame framechambre = new JFrame();
-             	 framechambre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                framechambre.setVisible(true);
-             	  JPanel panelchambre = new JPanel();
-                   List<String> chambres = Fichier.findLinesWithPrefix("Chambres", "Disponible");
-                    String[] columnNames = {"type", "Disponibilite", "prix", "reserver"};
-                    Object[][] data = new Object[chambres.size()][4];
-                    for (int j = 0; j < chambres.size(); j++) {
-                 	   
-                        String chambre = chambres.get(j);  
-                        String[] parts = chambre.split(" ");
+ 			                 // Créer le modèle de table
+ 			                 DefaultTableModel model2 = new DefaultTableModel(data, columnNamess) {
+ 			                     private static final long serialVersionUID = 1L;
 
-                   	 String numero = parts[1];
-                   	 String type = parts[2];
-                   	 String prix = parts[4];
-                       
-                        data[i][0] = numero;
-                        data[i][1] = type;
-                        data[i][2] = "Disponible";
-                        data[i][3] =  prix;
-                        data[i][3] = false; // Par défaut, les cases à cocher sont décochées
-                    }
-       
-                    // Créer les noms de colonnes
-                    String[] columnNamess = {"Numero" ,"Type", "Disponibilité", "Prix", "Réserver"};
+ 			      			@Override
+ 			                     public  Class<?> getColumnClass(int columnIndex) {
+ 			                         if (columnIndex == 3) {
+ 			                             return Boolean.class; // La colonne des cases à cocher est de type Boolean
+ 			                         }
+ 			                         return super.getColumnClass(columnIndex);
+ 			                     };
 
-                    // Créer le modèle de table
-                    DefaultTableModel modell = new DefaultTableModel(data, columnNamess) {
-                        @Override
-                        public  Class<?> getColumnClass(int columnIndex) {
-                            if (columnIndex == 4) {
-                                return Boolean.class; // La colonne des cases à cocher est de type Boolean
-                            }
-                            return super.getColumnClass(columnIndex);
-                        };
+ 			                     @Override
+ 			                     public boolean isCellEditable(int row, int column) {
+ 			                         return column == 3; // Seule la colonne des cases à cocher est éditable
+ 			                     }
+ 			                 };
+ 			                 
+ 			                 // Créer la JTable avec le modèle de table personnalisé
+ 			                 JTable table = new JTable(model2);                 
+ 			                 JScrollPane scrollPane = new javax.swing.JScrollPane(table);
+ 			                framechambre.add(scrollPane,BorderLayout.NORTH);
 
-                        @Override
-                        public boolean isCellEditable(int row, int column) {
-                            return column == 4; // Seule la colonne des cases à cocher est éditable
-                        }   };
-                    
-                    // Créer la JTable avec le modèle de table personnalisé
-                    JTable tablee = new JTable(modell);
-                 //   chambrepanel(table);
-                    framechambre.add(panelchambre);
-                JButton  reserverButton = new  JButton("+");
-                   reserverButton.addActionListener(new ActionListener() {
-                                      @Override
-                                      public void actionPerformed(ActionEvent e) {
-                                    	   for (int i = 0; i < modell.getRowCount(); i++) {
+ 			           							model2.addTableModelListener(new TableModelListener() {
+ 			           			 			    public void tableChanged(TableModelEvent e) {
+ 			           			 			   int row2 = e.getFirstRow();
+ 			           	 			           int column2 = e.getColumn();
+ 			           							
+ 			           								if(column2==3) {
+ 			                                          Boolean isChecked = (Boolean) model2.getValueAt(row2, 3);
+ 			                                          if (isChecked) {
+ 			                                              // Traiter la réservation de la chambre
+ 			                                       	   String numero_c =  (String)model2.getValueAt(row2, 0);
+ 			                                              String type_c = (String) model2.getValueAt(row2, 1);
+ 			                                              String prix_c = (String) model2.getValueAt(row2, 2);
+ 			                                             
+ 			                                          	int intnumero = Integer.parseInt(numero_c);
+ 			                                           String a = RentButtonFrame.line_ID;
+ 			                         	               char []a2 = a.toCharArray();
+ 			                         	                char IDchar = a2[0];
+ 			                         	                String ID = String.valueOf(IDchar);
+ 			                                          	int IDD = Integer.parseInt(ID);
+ 			                                          	
+ 			                                          	Chambre c =new Chambre(intnumero,Type.valueOf(type_c),Double.valueOf(prix_c));
+ 			                                          	//System.out.println("This is the reservation we are entering  :"+IDD+Datee.toDatee(datedebut)+Datee.toDatee(datefin)+ c+NUMERO);
+ 			                                          	Client.ModifierChambreReservation(IDD, Datee.toDatee(datedebut), Datee.toDatee(datefin), c,NUMERO);
+ 			                                          	Chambre.updateRoomavailability(intnumero);
+ 			                                          	Chambre.updateRoomavailability(Integer.valueOf(NUMERO));
+ 			                                          	model.setValueAt(numero_c, row, 3);
+ 			                                              JOptionPane.showMessageDialog(null, "Chambre " + intnumero  + " réservée !");
+ 			                                             
+ 			                                              framechambre.dispose();
+ 			                                            
 
-                                     	 Boolean isChecked = (Boolean) model.getValueAt(i, 3);
-                                          if (isChecked) {
-                                              // Traiter la réservation de la chambre
-                                       	   String numero =  (String)model.getValueAt(i, 0);
-                                              String type = (String) model.getValueAt(i, 1);
-                                              String disponibilite = (String) model.getValueAt(i, 2);
-                                              double prix = (double) model.getValueAt(i, 3);
-                                       
-                                          	int intnumero = Integer.parseInt(numero);
-                                           String a = RentButtonFrame.line_ID;
-                         	               char []a2 = a.toCharArray();
-                         	                char IDchar = a2[0];
-                         	                String ID = String.valueOf(IDchar);
-                                          	int IDD = Integer.parseInt(ID);
-                                        
-                                     	String NumeroNouvelleChambre = Fichier.findLineWithoutWord("Chambres", numero );
-                                          JOptionPane.showMessageDialog(framechambre, "Chambre réservée !");
-                                          HashMap<Datee,Datee> map = new   HashMap<Datee,Datee>();
-                                          map.put(debut,fin);
-                                          String stringdate=  Chambre.afficherHashMap(map);
-                                      Fichier.replaceWordInFile("Chambres", "Disponible",stringdate);
-                                       Fichier.replaceWordInFile("Reservations_Clients",numero, NumeroNouvelleChambre);
-                                          }   
-                                      }}
-                                });    }
-        
-              if( annulerreservation ) {
-      			try {
-                  	
-      				int iddint =  Integer.parseInt(idd );
-      	        Datee datedebutdate=  Datee.toDatee(datedebut);  
-      	      Datee datefindate=  Datee.toDatee(datefin); 
-      	       
-      	          int numeroint=  Integer.parseInt(numerochambree);
-      	            Reservation reservation = new Reservation (iddint,datedebutdate, datefindate,numeroint);
-                  	Fichier.deleteLineContainingWord("Reservations_Clients",reservation.toString());
-                       JOptionPane.showMessageDialog(nframe, "Réservation annulée : " + reservation.toString());
-                  	} catch ( Exception z)
-                  	{
-                  		System.out.println("erreur");
-                  	}
-                   }  
-             
-             
-             }     
-		
-        nframe.setSize(400, 300);
+ 			                                              }
+ 			                                           
+ 			                                         
+ 			                                            }
+ 			           			 			    }}); 
+ 			                 
+ 			                          	  
+ 			                   } catch(IOException ex) {
+ 			                  	  System.out.println("Erreur");
+ 			                   }
+ 			                 
+ 			         	   framechambre.pack();
+ 			                 framechambre.setVisible(true);
+ 			            }	  
+ 			    }
+ 			       if (column == 5) { 
+ 			    	  Boolean checked = (Boolean) model.getValueAt(row, column);
+			            if (checked) {    
+			            JFrame framedate = new JFrame();
+			           String  numerochambree = (String) model.getValueAt(row, 3);
+			           framedate.setSize(700,500);
+			      	   
+			      	   framedate.setResizable(true);
+			      	   framedate.setLayout(new BorderLayout());
+			           framedate.setVisible(true);	
+			           JPanel inputPanel = new JPanel(new GridBagLayout());
+			           GridBagConstraints gbc = new GridBagConstraints();
+			           gbc.insets = new Insets(5, 5, 5, 5); 
+			           JLabel label = new JLabel("Enter the new dates of your reservation:");
 
-        
-        nframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	                     framedate.add(label, BorderLayout.NORTH);
+			           // Add Start Date Label and Combo Boxes
+			           gbc.gridx = 0;
+			           gbc.gridy = 0;
+			           inputPanel.add(new JLabel("Start Date:"),gbc);
 
-		 
-		 }
-	
-		
-	});	
-		
-	
+			           gbc.gridx = 1;
+			           JComboBox<String>  ComboBoxjourdebut = new JComboBox<>(new String[] { "01", "02", "03","O4", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"});
+			           inputPanel.add(ComboBoxjourdebut,gbc);
+
+			           gbc.gridx = 2;
+			           JComboBox<String>  ComboBoxmoisdebut = new  JComboBox<>(new String[] { "01", "02", "03","04", "05", "06", "07", "08", "09", "10", "11", "12"});
+			           inputPanel.add(ComboBoxmoisdebut, gbc);
+
+			           gbc.gridx = 3;
+			           JComboBox<String>  ComboBoxanneedebut= new JComboBox<> (new String[] {"2024", "2025", "2026", "2027","2028","2029", "2030", "2031", "2032", "2033", "2034", "2035", "2036", "2037", "2038", "2039", "2040"});
+			           inputPanel.add(ComboBoxanneedebut, gbc);
+
+			           // Add End Date Label and Combo Boxes
+			           gbc.gridx = 0;
+			           gbc.gridy = 1;
+			           inputPanel.add(new JLabel("End Date:"), gbc);
+
+			           gbc.gridx = 1;
+			           JComboBox<String>  ComboBoxjourfin = new JComboBox<>(new String[] { "01", "02", "03","04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" });
+			           inputPanel.add(ComboBoxjourfin, gbc);
+
+			           gbc.gridx = 2;
+			           JComboBox<String>  ComboBoxmoisfin = new  JComboBox<>(new String[] { "01", "02", "03", "04" , "05", "06", "07", "08", "09", "10", "11", "12" });
+			           inputPanel.add(ComboBoxmoisfin, gbc);
+
+			           gbc.gridx = 3;
+			           JComboBox<String> ComboBoxanneefin= new JComboBox<> (new String[] {"2024", "2025", "2026", "2027","2028","2029", "2030", "2031", "2032", "2033", "2034", "2035", "2036", "2037", "2038", "2039", "2040"});
+
+			           inputPanel.add(ComboBoxanneefin,gbc);
    
-	        
-		
-}}
+			           framedate.add(inputPanel, BorderLayout.WEST);
+
+			        JButton  valider = new JButton();
+			           valider.setFont(new java.awt.Font("Kannada MN", 1, 18)); 
+			           valider.setForeground(new java.awt.Color(0, 102, 0));
+			           valider.setText("valider");
+				        valider.addActionListener(new ActionListener() {
+						        	public void actionPerformed(ActionEvent e) {
+						        String textFieldstart = ComboBoxjourdebut.getSelectedItem().toString()+"/"+ComboBoxmoisdebut.getSelectedItem().toString()+"/"+ComboBoxanneedebut.getSelectedItem().toString();
+						        
+						        Datee StartDateField= Datee.toDatee(textFieldstart);
+						       
+						         String textFieldend = ComboBoxjourfin.getSelectedItem().toString()+"/"+ComboBoxmoisfin.getSelectedItem().toString()+"/"+ComboBoxanneefin.getSelectedItem().toString();
+						        
+						         Datee EndDateField = Datee.toDatee(textFieldend);
+						       
+						         if ( Datee.avant(StartDateField,EndDateField)== false)
+					        	   {
+						        	   	JOptionPane.showMessageDialog(null, "The dates are wrongly placed", "Error", JOptionPane.ERROR_MESSAGE);
+						        	  }
+						        	  else{ 
+						        		try { 
+						        		String numero_chambre= (String) model.getValueAt(row, 3);
+						            	String datedeb  = (String) model.getValueAt(row, 1);
+						                String  datefi = (String) model.getValueAt(row, 2);
+						                String datedebut=Datee.formatDate(datedeb);
+						                String  datefin=Datee.formatDate(datefi);
+						                
+
+						                String chambre = Fichier.findLinesWithPrefixCombined("Chambres",numero_chambre);
+			                           
+			                            String parts[]=chambre.split(" ");
+								     Chambre c=new Chambre(Integer.valueOf(parts[0]),Type.valueOf(parts[1]),Double.valueOf(parts[2]));
+								     
+						        		Demande dem = new Demande(Integer.valueOf(extractedID),StartDateField,EndDateField,c);
+						        	    if (Administrateur.TraiterDemande(dem)==true) {
+						        	    	model.setValueAt(StartDateField.toString(), row, 1);
+							            	model.setValueAt(EndDateField.toString(), row, 2);
+						        	    	Client.ModifierDateReservation(Integer.valueOf (extractedID), StartDateField, EndDateField,c);	
+						        	    	Chambre.updateRoomavailability(Integer.valueOf(numero_chambre));
+						        	    	JOptionPane.showMessageDialog(null, "Reservation completed ","reserved", JOptionPane.INFORMATION_MESSAGE);
+						        	    	framedate.dispose();
+						        	    		        			
+					        			 	
+							        	}else {
+						        				JOptionPane.showMessageDialog(null, "the room is already reserved in this period", "Error", JOptionPane.ERROR_MESSAGE);
+						        				framedate.dispose();
+						        			}
+						        	    }catch(Exception ee) {
+						        			ee.getMessage();	}
+						        	   }
+						          
+						     }}); 
+
+			         
+			           
+			        framedate.add(valider,BorderLayout.SOUTH);   
+			       framedate.pack();  
+	             }
+			            }
+ 			      if (column == 6) { 
+			            Boolean checked = (Boolean) model.getValueAt(row, column);
+			            if (checked) { 			            	
+			            	 int reponse = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel this reservation ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+						        if (reponse == JOptionPane.YES_OPTION) {
+						     String  idd = (String) model.getValueAt(row, 0);
+						     String datedebut  = (String) model.getValueAt(row, 1);
+						     String  datefin = (String) model.getValueAt(row, 2);
+						     String  numerochambree = (String) model.getValueAt(row, 3);
+						     
+						     String ligne = Fichier.findLinesWithPrefixCombined("Chambres", numerochambree);
+						     String parts[]=ligne.split(" ");
+						     Chambre ch=new Chambre(Integer.valueOf(parts[0]),Type.valueOf(parts[1]),Double.valueOf(parts[2]));						     
+						     Reservation r = new Reservation(Integer.valueOf(idd),Datee.toDatee(datedebut),Datee.toDatee(datefin),ch);	
+			            	Client.AnnulerReservation(r);
+			            	
+
+			            	
+			            	model.removeRow(row);
+			            	
+			            	
+			            	
+			            	
+			            }
+			            }
+		    
+ 			    }
+ 			    }});
+
+             
+             
+             
+             
+             }catch(IOException ex) {
+            	System.out.println("Erreur");
+            }
+         
+       
+        
+	 }});}}
