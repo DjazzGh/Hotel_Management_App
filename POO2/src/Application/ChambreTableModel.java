@@ -1,9 +1,11 @@
 package Application;
-import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
+
+import javax.swing.table.AbstractTableModel;
+
 public class ChambreTableModel extends AbstractTableModel {
 
-    private ArrayList<Chambre> chambres;
+    private ArrayList<Chambre> chambres =Hotel.getListChambres();
 
     public ArrayList<Chambre> getChambres() {
         return chambres;
@@ -21,7 +23,7 @@ public class ChambreTableModel extends AbstractTableModel {
     @Override
     public int getColumnCount() {
         // Définir le nombre de colonnes en fonction des attributs de la classe Chambre
-        return 4; // Par exemple, pour afficher le numéro, le nom, le type et le prix
+        return 3; // Par exemple, pour afficher le numéro, le nom, le type et le prix
     }
 
     @Override
@@ -33,9 +35,8 @@ public class ChambreTableModel extends AbstractTableModel {
             case 1:
                 return chambre.gettypechambre();
             case 2:
-                return chambre.getdisponibiltéchambre();
-            case 3:
-                return chambre.getprix();
+            	return chambre.getprix();
+            
             default:
                 return null;
         }
@@ -45,14 +46,23 @@ public class ChambreTableModel extends AbstractTableModel {
         return true;
     }
 
-    public void removeRow(int selectedRow) {
-        if (selectedRow < 0 || selectedRow>= chambres.size()) {
-            return;}
-            chambres.remove(selectedRow);
+    public void removeRow(Chambre chambreToRemove) {
+        // Find the index of the chambre in the list
+        int index = chambres.indexOf(chambreToRemove);
 
-            // Notifier les listeners du changement
-            fireTableRowsDeleted(selectedRow, selectedRow);
+        // Check if the chambre exists in the list
+        if (index < 0) {
+            return;  // Do nothing if chambre not found
+        }
+
+        // Remove the chambre from the list
+        chambres.remove(index);
+
+        // Notify listeners of the change (fireTableRowsDeleted with the found index)
+        fireTableRowsDeleted(index, index); // Deleted row at the found index
     }
+
+
     public void setValueAt(Object value, int row, int column) {
         // Vérifier si la cellule est modifiable
         if (!isCellEditable(row, column)) {
@@ -65,15 +75,14 @@ public class ChambreTableModel extends AbstractTableModel {
         // Mettre à jour la valeur de la chambre selon la colonne
         switch (column) {
             case 0:
+               chambre.setNumero((Integer) value);
 
                 break;
             case 1:
                 chambre.setTypeChambre((Type) value);
                 break;
             case 2:
-                chambre.setDisponibilité((boolean) value);
-                break;
-            case 3:
+                
                 chambre.setPrix((double) value);
                 break;
         }
@@ -81,4 +90,14 @@ public class ChambreTableModel extends AbstractTableModel {
         // Mettre à jour le modèle de données
         fireTableCellUpdated(row, column); // Notifier le changement d'une seule cellule
     }
+    public void addRow(Chambre chambre) {
+        // Add the chambre to the list of chambres
+        chambres.add(chambre);
+
+        // Notify listeners of the change
+        fireTableRowsInserted(chambres.size() - 1, chambres.size() - 1); // Insert a new row at the end
+    }
+
+
+
 }
