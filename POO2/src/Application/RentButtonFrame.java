@@ -1,11 +1,11 @@
 package Application;
 
 import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,10 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class RentButtonFrame extends javax.swing.JFrame {
+	static String line_ID;
     private javax.swing.JLabel BirthdateLabel;
     private javax.swing.JTextField EmailField;
     private javax.swing.JLabel EmailLabel;
@@ -103,7 +104,7 @@ public class RentButtonFrame extends javax.swing.JFrame {
                 motDepasseField = new javax.swing.JPasswordField();
                 confirmerButton = new javax.swing.JButton();
 
-                inscriptionFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                
                 inscriptionFrame.setVisible(true);
                 inscriptionFrame.setSize(450,500);
                 TopPanel.setBackground(new java.awt.Color(0, 50,0));
@@ -335,14 +336,29 @@ public class RentButtonFrame extends javax.swing.JFrame {
         ValidateButton.addActionListener(new ActionListener() {
         	   
         	public void actionPerformed(ActionEvent e) {
+        		
         		String Utilisateurname = jTextField1.getText().trim();
                 char [] clientpassword = jPasswordField1.getPassword();
                 String passwordclient = new String(clientpassword).trim();
+                
+  
             	if(Utilisateur.AuthentificationClient(Utilisateurname,passwordclient)==false) {
         			 JOptionPane.showMessageDialog(null, "Une erreur est survenue.", "Erreur", JOptionPane.ERROR_MESSAGE);
         		}
         		else {
         			
+        			try {
+            			String a=Fichier.findLineContainingWord("Clients", Utilisateurname.trim());
+            			String b=Fichier.findLineContainingWord("Clients", passwordclient.trim());
+            			if(a.equals(b)) {
+            				line_ID=a;
+            				
+            			}
+            			
+            			}
+            			catch(IOException ex) {
+            				System.out.println("Erreur");
+            			}
         			JFrame options = new JFrame();
         			options.setSize(500,400);
         	        options.setResizable(false);
@@ -378,7 +394,7 @@ public class RentButtonFrame extends javax.swing.JFrame {
         	        JLabel imageLabel = new JLabel(resizedImageIcon);
         	        imageLabel.setBounds(0, 0, 500, 400);
         	        imageLabel.setOpaque(false);
-  
+        	       
         	        
         	        
         	        options.add(jButton2);
@@ -465,4 +481,5 @@ public class RentButtonFrame extends javax.swing.JFrame {
 
         pack();
 
-    } } 
+    } 
+    } 
